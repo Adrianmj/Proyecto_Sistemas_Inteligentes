@@ -14,7 +14,7 @@ public class PanelBotones extends Container {
 	PanelGrafico Panel;
 	public Timer timer;
 	public PanelBotones(PanelGrafico Panel) {
-		timer = new Timer(500, new timeListener());
+		timer = new Timer(50, new timeListener());
 		this.Panel = Panel;
 		Dimension d = new Dimension(128, 50);
 		start.setPreferredSize(d);
