@@ -1,5 +1,4 @@
-import java.awt.Color;
-import java.awt.Graphics;
+
 import java.awt.Point;
 
 public class Comida {
@@ -31,5 +30,9 @@ public class Comida {
 	public Point getPunto() {
 		Point punto = new Point(this.getX(), this.getY());
 		return punto;
+	}
+
+	public static int getSize() {
+		return SIZE;
 	}
 }

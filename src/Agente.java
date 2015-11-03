@@ -8,8 +8,8 @@ public class Agente {
 	private int maxW, maxH;
 	int lastMove = -1;
 	int up, down, left, right;
-	private int Energy;
-
+	private int Energy = 20;
+	private int propUp,propDown,propRight,propLeft;
 	public Agente(int x, int y, ArrayList<Comida> coordComidas, int maxW, int maxH) {
 		this.coordComidas = coordComidas;
 		this.setX(x);
@@ -17,6 +17,11 @@ public class Agente {
 		this.setRadius(25);
 		this.maxH = maxH;
 		this.maxW = maxW;
+		this.setPropRight(25);
+		this.setPropLeft(25);
+		this.setPropUp(25);
+		this.setPropDown(25);
+
 	}
 
 	public int getY() {
@@ -35,6 +40,27 @@ public class Agente {
 		this.x = x;
 	}
 
+	public int getBest(){
+		int max = 0;
+		int mejor = -1;
+		if (max <= this.right) {
+			max = this.right;
+			mejor = 0;
+		}
+		if (max <= this.left) {
+			max = this.left;
+			mejor = 1;
+		}
+		if (max <= this.down) {
+			max = this.down;
+			mejor = 2;
+		}
+		if (max <= this.up) {
+			max = this.up;
+			mejor = 3;
+		}
+		return mejor;
+	}
 	public Point getPunto() {
 		Point punto = new Point(this.getX(), this.getY());
 		return punto;
@@ -54,7 +80,6 @@ public class Agente {
 		case 3:
 			this.up = this.up + 1;
 			break;
-
 		default:
 			break;
 		}
@@ -137,5 +162,37 @@ public class Agente {
 
 	public void setEnergy(int energy) {
 		this.Energy = energy;
+	}
+
+	public int getPropUp() {
+		return propUp;
+	}
+
+	public void setPropUp(int propUp) {
+		this.propUp = propUp;
+	}
+
+	public int getPropRight() {
+		return propRight;
+	}
+
+	public void setPropRight(int propRight) {
+		this.propRight = propRight;
+	}
+
+	public int getPropLeft() {
+		return propLeft;
+	}
+
+	public void setPropLeft(int propLeft) {
+		this.propLeft = propLeft;
+	}
+
+	public int getPropDown() {
+		return propDown;
+	}
+
+	public void setPropDown(int propDown) {
+		this.propDown = propDown;
 	}
 }
