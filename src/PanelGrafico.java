@@ -91,7 +91,6 @@ public class PanelGrafico extends JComponent {
 		g.setColor(Color.green);
 		for (int i = 0; i < poblacion.size(); i++) {
 			Point punto = poblacion.get(i).getPunto();
-
 			g.fillRect(punto.x, punto.y, 5, 5);
 			g.drawOval(punto.x - poblacion.get(i).getRadius(), punto.y - poblacion.get(i).getRadius(),
 					poblacion.get(i).getRadius() * 2, poblacion.get(i).getRadius() * 2);

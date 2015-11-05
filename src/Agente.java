@@ -137,7 +137,7 @@ public class Agente {
 	}
 
 	public void move() {
-		int aux = (int) (Math.random() * 100);
+		int aux = (int) (Math.random() * 4);
 		
 		this.lastMove = aux;
 		switch (aux) {
