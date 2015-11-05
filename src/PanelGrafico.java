@@ -1,8 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.swing.JComponent;
 
 public class PanelGrafico extends JComponent {
@@ -16,6 +18,7 @@ public class PanelGrafico extends JComponent {
 	PanelBotones panel;
 	boolean undefined = true;
 	private int ano = 0;
+
 	public PanelGrafico(PanelBotones panel) {
 		this.panel = panel;
 	}
@@ -62,7 +65,7 @@ public class PanelGrafico extends JComponent {
 			if (poblacion.get(i).getEnergy() <= 0) {
 				poblacion.remove(i);
 			}
-			if (0 == ano%10) {
+			if (0 == ano % 10) {
 				System.out.println(poblacion.get(i).getBest());
 			}
 		}
@@ -76,23 +79,24 @@ public class PanelGrafico extends JComponent {
 	}
 
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 		if (undefined) {
 			this.definer();
 		}
-		g.setColor(Color.orange);
+		g2d.setColor(Color.orange);
 		for (int i = 0; i < coordComidas.size(); i++) {
 			Point punto = coordComidas.get(i).getPunto();
-			g.fillRect(punto.x, punto.y, 5, 5);
+			g2d.fillRect(punto.x, punto.y, 5, 5);
 
 		}
 
 		g.setColor(Color.green);
 		for (int i = 0; i < poblacion.size(); i++) {
 			Point punto = poblacion.get(i).getPunto();
-			g.fillRect(punto.x, punto.y, 5, 5);
-			g.drawOval(punto.x - poblacion.get(i).getRadius(), punto.y - poblacion.get(i).getRadius(),
+			g2d.fillRect(punto.x, punto.y, 5, 5);
+			g2d.drawOval(punto.x - poblacion.get(i).getRadius(), punto.y - poblacion.get(i).getRadius(),
 					poblacion.get(i).getRadius() * 2, poblacion.get(i).getRadius() * 2);
 
 		}
