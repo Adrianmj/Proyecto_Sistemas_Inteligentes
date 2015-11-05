@@ -54,9 +54,6 @@ public class PanelGrafico extends JComponent {
 
 	public boolean update() {
 		ano++;
-		if (ano == 10) {
-			System.out.println();
-		}
 		for (int i = 0; i < poblacion.size(); i++) {
 
 			if (!poblacion.get(i).accion()) {
@@ -65,7 +62,7 @@ public class PanelGrafico extends JComponent {
 			if (poblacion.get(i).getEnergy() <= 0) {
 				poblacion.remove(i);
 			}
-			if (ano == 10) {
+			if (0 == ano%10) {
 				System.out.println(poblacion.get(i).getBest());
 			}
 		}

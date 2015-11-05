@@ -9,7 +9,8 @@ public class Agente {
 	int lastMove = -1;
 	int up, down, left, right;
 	private int Energy = 20;
-	private int propUp,propDown,propRight,propLeft;
+	private int propUp, propDown, propRight, propLeft;
+
 	public Agente(int x, int y, ArrayList<Comida> coordComidas, int maxW, int maxH) {
 		this.coordComidas = coordComidas;
 		this.setX(x);
@@ -40,33 +41,66 @@ public class Agente {
 		this.x = x;
 	}
 
-	public int getBest(){
+	public String getBest() {
 		int max = 0;
-		int mejor = -1;
+		String mejor = "Nadie";
 		if (max <= this.right) {
 			max = this.right;
-			mejor = 0;
+			mejor = "Derecha";
 		}
 		if (max <= this.left) {
 			max = this.left;
-			mejor = 1;
+			mejor = "Izquierda";
 		}
 		if (max <= this.down) {
 			max = this.down;
-			mejor = 2;
+			mejor = "Abajo";
 		}
 		if (max <= this.up) {
 			max = this.up;
-			mejor = 3;
+			mejor = "Arriba";
 		}
+
 		return mejor;
 	}
+
+	public void improve(String mejor) {
+		this.propLeft = this.propLeft - 1;
+		this.propRight = this.propRight - 1;
+		this.propDown = this.propDown - 1;
+		this.propUp = this.propUp - 1;
+		
+		switch (mejor) {
+		case "Derecha":
+			this.propRight = this.propRight + 4;
+			break;
+		case "Izquierda":
+			this.left = this.left + 4;
+			break;
+		case "Arriba":
+			this.up = this.up + 4;
+			break;
+		case "Abajo":
+			this.down = this.down + 4;
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void resetStats() {
+		this.right = 0;
+		this.left = 0;
+		this.up = 0;
+		this.down = 0;
+	}
+
 	public Point getPunto() {
 		Point punto = new Point(this.getX(), this.getY());
 		return punto;
 	}
 
-	public void improve() {
+	public void opcCounter() {
 		switch (this.lastMove) {
 		case 0:
 			this.right = this.right + 1;
@@ -94,7 +128,7 @@ public class Agente {
 
 			this.setX(coordComidas.get(i).getX());
 			this.setY(coordComidas.get(i).getY());
-			this.improve();
+			this.opcCounter();
 			this.setEnergy(this.getEnergy() + 1);
 			coordComidas.remove(i);
 			return true;
@@ -103,7 +137,8 @@ public class Agente {
 	}
 
 	public void move() {
-		int aux = (int) (Math.random() * 4);
+		int aux = (int) (Math.random() * 100);
+		
 		this.lastMove = aux;
 		switch (aux) {
 		case 0:
@@ -120,7 +155,7 @@ public class Agente {
 			this.setY(this.getY() - this.getRadius() - 1);
 			break;
 		}
-		
+
 		if (this.getX() > maxW) {
 			this.setX(maxW);
 		}
@@ -135,7 +170,7 @@ public class Agente {
 			this.setY(0);
 
 		}
-		this.setEnergy(this.getEnergy()-1);
+		this.setEnergy(this.getEnergy() - 1);
 	}
 
 	public boolean accion() {
