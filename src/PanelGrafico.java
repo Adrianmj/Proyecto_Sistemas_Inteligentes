@@ -19,14 +19,16 @@ public class PanelGrafico extends JComponent {
 	PanelBotones panel;
 	boolean undefined = true;
 	private int ano = 0;
-	int NUMCOMIDA =  200;
+	int NUMCOMIDA = 200;
 	int NUMPOB = 10;
+
 	public PanelGrafico(PanelBotones panel) {
 		this.panel = panel;
 	}
 
 	public static void quicksort(int izq, int der) {
-		Agente pivote = poblacion.get(izq); // tomamos primer elemento como pivote
+		Agente pivote = poblacion.get(izq); // tomamos primer elemento como
+											// pivote
 		int i = izq; // i realiza la búsqueda de izquierda a derecha
 		int j = der; // j realiza la búsqueda de derecha a izquierda
 		Agente aux;
@@ -43,15 +45,17 @@ public class PanelGrafico extends JComponent {
 			}
 		}
 
-		poblacion.set(izq, poblacion.get(j)); // se coloca el pivote en su lugar de forma que
-								// tendremos
-		poblacion.set(j, pivote); // los menores a su izquierda y los mayores a su
-							// derecha
+		poblacion.set(izq, poblacion.get(j)); // se coloca el pivote en su lugar
+												// de forma que
+		// tendremos
+		poblacion.set(j, pivote); // los menores a su izquierda y los mayores a
+									// su
+		// derecha
 		if (izq < j - 1)
 			quicksort(izq, j - 1); // ordenamos subarray izquierdo
 		if (j + 1 < der)
 			quicksort(j + 1, der); // ordenamos subarray derecho
-		
+
 	}
 
 	public void definer() {
@@ -76,9 +80,6 @@ public class PanelGrafico extends JComponent {
 			ylim = Math.sqrt(radius * radius - x2 * x2);
 			y2 = Math.random() * 2 * ylim - ylim;
 
-			// x1 = 175 + (int) (Math.random() * (this.getWidth()-350));
-			// y1 = 200 + (int) (Math.random() * (this.getHeight()-400));
-
 			x1 = (int) x2 + this.getWidth() / 2;
 			y1 = (int) y2 + this.getHeight() / 2;
 			poblacion.add(new Agente(x1, y1, coordComidas, this.getWidth(), this.getHeight()));
@@ -88,6 +89,15 @@ public class PanelGrafico extends JComponent {
 
 	public boolean update() {
 		ano++;
+		if (0 == ano % 10) {
+			this.quicksort(0, poblacion.size() - 1);
+			System.out.println("ordenada:");
+			System.out.print("[");
+			for (int j = 0; j < poblacion.size(); j++) {
+				System.out.print(poblacion.get(j).getBest() + ",");
+			}
+			System.out.println("]");
+		}
 		for (int i = 0; i < poblacion.size(); i++) {
 
 			if (!poblacion.get(i).accion()) {
@@ -96,18 +106,7 @@ public class PanelGrafico extends JComponent {
 			if (poblacion.get(i).getEnergy() <= 0) {
 				poblacion.remove(i);
 			}
-			if (0 == ano % 10) {
-				System.out.println("Sin ordenar:");
-				for (int k = 0; k < poblacion.size(); k++) {
-					System.out.println(poblacion.get(k).getBest());
-				}
-				
-				this.quicksort(0, poblacion.size()-1);
-				System.out.println("ordenada:");
-				for (int j = 0; j < poblacion.size(); j++) {
-					System.out.println(poblacion.get(j).getBest());
-				}
-			}
+
 		}
 		if (poblacion.isEmpty()) {
 			return true;
