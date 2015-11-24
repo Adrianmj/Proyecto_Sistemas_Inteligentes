@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JComponent;
@@ -14,18 +15,48 @@ public class PanelGrafico extends JComponent {
 	private static final long serialVersionUID = 1L;
 	Random rand = new Random();
 	ArrayList<Comida> coordComidas = new ArrayList<Comida>();
-	ArrayList<Agente> poblacion = new ArrayList<Agente>();
+	static ArrayList<Agente> poblacion = new ArrayList<Agente>();
 	PanelBotones panel;
 	boolean undefined = true;
 	private int ano = 0;
-
+	int NUMCOMIDA =  200;
+	int NUMPOB = 10;
 	public PanelGrafico(PanelBotones panel) {
 		this.panel = panel;
 	}
 
+	public static void quicksort(int izq, int der) {
+		Agente pivote = poblacion.get(izq); // tomamos primer elemento como pivote
+		int i = izq; // i realiza la búsqueda de izquierda a derecha
+		int j = der; // j realiza la búsqueda de derecha a izquierda
+		Agente aux;
+
+		while (i < j) { // mientras no se crucen las búsquedas
+			while (poblacion.get(i).getBest() <= pivote.getBest() && i < j)
+				i++; // busca elemento mayor que pivote
+			while (poblacion.get(j).getBest() > pivote.getBest())
+				j--; // busca elemento menor que pivote
+			if (i < j) { // si no se han cruzado
+				aux = poblacion.get(i); // los intercambia
+				poblacion.set(i, poblacion.get(j));
+				poblacion.set(j, aux);
+			}
+		}
+
+		poblacion.set(izq, poblacion.get(j)); // se coloca el pivote en su lugar de forma que
+								// tendremos
+		poblacion.set(j, pivote); // los menores a su izquierda y los mayores a su
+							// derecha
+		if (izq < j - 1)
+			quicksort(izq, j - 1); // ordenamos subarray izquierdo
+		if (j + 1 < der)
+			quicksort(j + 1, der); // ordenamos subarray derecho
+		
+	}
+
 	public void definer() {
 		int x1, y1;
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < NUMCOMIDA; i++) {
 			x1 = (int) (Math.random() * this.getWidth());
 			y1 = (int) (Math.random() * this.getHeight());
 			if (x1 > this.getWidth() - 5) {
@@ -40,7 +71,7 @@ public class PanelGrafico extends JComponent {
 		double x2, y2;
 		int radius = 15;
 		double ylim;
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < NUMPOB; i++) {
 			x2 = (Math.random() * 2 * radius) - radius;
 			ylim = Math.sqrt(radius * radius - x2 * x2);
 			y2 = Math.random() * 2 * ylim - ylim;
@@ -66,7 +97,16 @@ public class PanelGrafico extends JComponent {
 				poblacion.remove(i);
 			}
 			if (0 == ano % 10) {
-				System.out.println(poblacion.get(i).getBest());
+				System.out.println("Sin ordenar:");
+				for (int k = 0; k < poblacion.size(); k++) {
+					System.out.println(poblacion.get(k).getBest());
+				}
+				
+				this.quicksort(0, poblacion.size()-1);
+				System.out.println("ordenada:");
+				for (int j = 0; j < poblacion.size(); j++) {
+					System.out.println(poblacion.get(j).getBest());
+				}
 			}
 		}
 		if (poblacion.isEmpty()) {

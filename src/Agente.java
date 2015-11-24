@@ -10,7 +10,7 @@ public class Agente {
 	int up, down, left, right;
 	private int Energy = 20;
 	private int propUp, propDown, propRight, propLeft;
-
+	private int best = -1;
 	public Agente(int x, int y, ArrayList<Comida> coordComidas, int maxW, int maxH) {
 		this.coordComidas = coordComidas;
 		this.setX(x);
@@ -41,27 +41,32 @@ public class Agente {
 		this.x = x;
 	}
 
-	public String getBest() {
+	public int getBest() {
 		int max = 0;
+	
 		String mejor = "Nadie";
 		if (max <= this.right) {
 			max = this.right;
 			mejor = "Derecha";
+			best = 0;
 		}
 		if (max <= this.left) {
 			max = this.left;
 			mejor = "Izquierda";
+			best = 1;
 		}
 		if (max <= this.down) {
 			max = this.down;
 			mejor = "Abajo";
+			best = 2;
 		}
 		if (max <= this.up) {
 			max = this.up;
 			mejor = "Arriba";
+			best = 3;
 		}
 
-		return mejor;
+		return best;
 	}
 
 	public void improve(String mejor) {
