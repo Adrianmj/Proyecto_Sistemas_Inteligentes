@@ -40,6 +40,41 @@ public class Agente {
 	public void setX(int x) {
 		this.x = x;
 	}
+	
+	public int getProp(int i) {
+		switch (i) {
+		case 0:
+			return this.propRight;
+		case 1:
+			return this.propLeft;
+		case 2:
+			return this.propUp;
+		case 3:
+			return this.propDown;
+		default:
+			return -1;
+		}
+	}
+	
+	public void setProp(int i, int valor) {
+		switch (i) {
+		case 0:
+			this.propRight = valor;
+			break;
+		case 1:
+			this.propLeft = valor;
+			break;
+		case 2:
+			this.propUp = valor;
+			break;
+		case 3:
+			this.propDown = valor;
+			break;
+		default:
+			System.out.println("Error");
+			break;
+		}
+	}
 
 	public int getBest() {
 		int max = 0;

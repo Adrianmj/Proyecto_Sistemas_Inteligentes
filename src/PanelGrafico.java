@@ -19,6 +19,8 @@ public class PanelGrafico extends JComponent {
 	PanelBotones panel;
 	boolean undefined = true;
 	private int ano = 0;
+
+	ArrayList<Agente> seleccionados = new ArrayList();
 	int NUMCOMIDA = 200;
 	int NUMPOB = 10;
 
@@ -28,7 +30,7 @@ public class PanelGrafico extends JComponent {
 
 	public static void quicksort(int izq, int der) {
 		Agente pivote = poblacion.get(izq); // tomamos primer elemento como
-											// pivote
+		// pivote
 		int i = izq; // i realiza la búsqueda de izquierda a derecha
 		int j = der; // j realiza la búsqueda de derecha a izquierda
 		Agente aux;
@@ -46,10 +48,10 @@ public class PanelGrafico extends JComponent {
 		}
 
 		poblacion.set(izq, poblacion.get(j)); // se coloca el pivote en su lugar
-												// de forma que
+		// de forma que
 		// tendremos
 		poblacion.set(j, pivote); // los menores a su izquierda y los mayores a
-									// su
+		// su
 		// derecha
 		if (izq < j - 1)
 			quicksort(izq, j - 1); // ordenamos subarray izquierdo
@@ -97,6 +99,7 @@ public class PanelGrafico extends JComponent {
 				System.out.print(poblacion.get(j).getBest() + ",");
 			}
 			System.out.println("]");
+			seleccion();
 		}
 		for (int i = 0; i < poblacion.size(); i++) {
 
@@ -116,6 +119,37 @@ public class PanelGrafico extends JComponent {
 		return false;
 
 	}
+
+	public void seleccion() {
+		int mejores = poblacion.size() * 20/100 + 1;
+		Agente seleccionado;
+		
+		seleccionados.clear();
+
+		while (seleccionados.size() < 2) {
+			seleccionado = poblacion.get((int)(poblacion.size() - Math.random() * mejores));
+
+			if (seleccionados.contains(seleccionado) == false)
+				seleccionados.add(seleccionado);
+		}
+		System.out.println(seleccionados.get(0));
+		System.out.println(seleccionados.get(1));
+		mutacion();
+	}
+	
+	public void mutacion() {
+		int corte = (int) (Math.random() * 3);
+		int i = 0;
+		Agente nuevo = new Agente(0, 0, coordComidas, this.getWidth(), this.getHeight()); 
+		for (i = 0; i < corte; i++) {
+			nuevo.setProp(i, seleccionados.get(0).getProp(i));
+		}
+		for (i = corte; i < 3; i++) {
+			nuevo.setProp(i, seleccionados.get(1).getProp(i));
+		}
+		poblacion.add(nuevo);
+	}
+
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -141,4 +175,5 @@ public class PanelGrafico extends JComponent {
 		}
 
 	}
+
 }
