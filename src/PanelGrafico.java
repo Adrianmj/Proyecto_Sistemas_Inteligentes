@@ -3,7 +3,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JComponent;
@@ -20,7 +19,7 @@ public class PanelGrafico extends JComponent {
 	boolean undefined = true;
 	private int ano = 0;
 
-	ArrayList<Agente> seleccionados = new ArrayList();
+	ArrayList<Agente> seleccionados = new ArrayList<Agente>();
 	int NUMCOMIDA = 200;
 	int NUMPOB = 10;
 
@@ -92,7 +91,7 @@ public class PanelGrafico extends JComponent {
 	public boolean update() {
 		ano++;
 		if (0 == ano % 10) {
-			this.quicksort(0, poblacion.size() - 1);
+			PanelGrafico.quicksort(0, poblacion.size() - 1);
 			System.out.println("ordenada:");
 			System.out.print("[");
 			for (int j = 0; j < poblacion.size(); j++) {
