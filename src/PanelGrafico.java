@@ -60,6 +60,7 @@ public class PanelGrafico extends JComponent {
 
 	}
 
+	//constructor
 	public void definer() {
 		int x1, y1;
 		for (int i = 0; i < NUMCOMIDA; i++) {
@@ -102,7 +103,7 @@ public class PanelGrafico extends JComponent {
 			seleccion();
 		}
 		for (int i = 0; i < poblacion.size(); i++) {
-
+			
 			if (!poblacion.get(i).accion()) {
 				poblacion.get(i).move();
 			}
@@ -122,6 +123,7 @@ public class PanelGrafico extends JComponent {
 
 	public void seleccion() {
 		int mejores = poblacion.size() * 20/100 + 1;
+		System.out.println(mejores);
 		Agente seleccionado;
 		
 		seleccionados.clear();
@@ -140,7 +142,20 @@ public class PanelGrafico extends JComponent {
 	public void mutacion() {
 		int corte = (int) (Math.random() * 3);
 		int i = 0;
-		Agente nuevo = new Agente(0, 0, coordComidas, this.getWidth(), this.getHeight()); 
+		//Añade al individuo al panel
+		int x1, y1;
+		double x2, y2;
+		int radius = 15;
+		double ylim;
+		x2 = (Math.random() * 2 * radius) - radius;
+		ylim = Math.sqrt(radius * radius - x2 * x2);
+		y2 = Math.random() * 2 * ylim - ylim;
+		x1 = (int) x2 + this.getWidth() / 2;
+		y1 = (int) y2 + this.getHeight() / 2;
+		Agente nuevo = new Agente(x1, y1, coordComidas, this.getWidth(), this.getHeight());
+		
+		
+		//Le pasamos las propiedades
 		for (i = 0; i < corte; i++) {
 			nuevo.setProp(i, seleccionados.get(0).getProp(i));
 		}

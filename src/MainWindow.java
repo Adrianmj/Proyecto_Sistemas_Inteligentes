@@ -3,7 +3,9 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 public class MainWindow {
-	private Dimension size = new Dimension(403,450);
+	static final int WIDTH = 400;
+	static final int HEIGHT = 400;
+	private Dimension size = new Dimension(WIDTH,HEIGHT);
 	protected JFrame boardFrame;
 	PanelGrafico panel;
 	PanelBotones botones;
