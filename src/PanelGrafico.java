@@ -22,7 +22,7 @@ public class PanelGrafico extends JComponent {
 
 	ArrayList<Agente> seleccionados = new ArrayList();
 	int NUMCOMIDA = 200;
-	int NUMPOB = 10;
+	int NUMPOB = 6;
 
 	public PanelGrafico(PanelBotones panel) {
 		this.panel = panel;
@@ -60,7 +60,7 @@ public class PanelGrafico extends JComponent {
 
 	}
 
-	//constructor
+	// constructor
 	public void definer() {
 		int x1, y1;
 		for (int i = 0; i < NUMCOMIDA; i++) {
@@ -103,7 +103,7 @@ public class PanelGrafico extends JComponent {
 			seleccion();
 		}
 		for (int i = 0; i < poblacion.size(); i++) {
-			
+
 			if (!poblacion.get(i).accion()) {
 				poblacion.get(i).move();
 			}
@@ -122,27 +122,43 @@ public class PanelGrafico extends JComponent {
 	}
 
 	public void seleccion() {
-		int mejores = poblacion.size() * 20/100 + 1;
+		int mejores = poblacion.size() * 20 / 100 + 1;
 		System.out.println(mejores);
 		Agente seleccionado;
-		
+
 		seleccionados.clear();
 
-		while (seleccionados.size() < 2) {
-			seleccionado = poblacion.get((int)(poblacion.size() - Math.random() * mejores));
-
-			if (seleccionados.contains(seleccionado) == false)
+		System.out.println("Tamaño de poblasion " + poblacion.size());
+		if (poblacion.size() > 1) {
+			if (poblacion.size() == 2) {
+				seleccionado = poblacion.get(0);
 				seleccionados.add(seleccionado);
-		}
-		System.out.println(seleccionados.get(0));
-		System.out.println(seleccionados.get(1));
-		mutacion();
-	}
+				seleccionado = poblacion.get(1);
+				seleccionados.add(seleccionado);
+			} else {
+			while (seleccionados.size() < 2) {
+				System.out.println("TAMAÑO DE LOS SLEKSIONADOS " + seleccionados.size());
+				System.out.println("TAMAÑO DE LA POBLASION " + poblacion.size());
+				System.out.println(mejores);
 	
+					seleccionado = poblacion.get((int) (poblacion.size() - Math.random() * mejores));
+
+					if (seleccionados.contains(seleccionado) == false)
+						seleccionados.add(seleccionado);
+
+				}
+			}
+			System.out.println(seleccionados.get(0));
+			System.out.println(seleccionados.get(1));
+			mutacion();
+		}
+
+	}
+
 	public void mutacion() {
 		int corte = (int) (Math.random() * 3);
 		int i = 0;
-		//Añade al individuo al panel
+		// Añade al individuo al panel
 		int x1, y1;
 		double x2, y2;
 		int radius = 15;
@@ -153,9 +169,8 @@ public class PanelGrafico extends JComponent {
 		x1 = (int) x2 + this.getWidth() / 2;
 		y1 = (int) y2 + this.getHeight() / 2;
 		Agente nuevo = new Agente(x1, y1, coordComidas, this.getWidth(), this.getHeight());
-		
-		
-		//Le pasamos las propiedades
+
+		// Le pasamos las propiedades
 		for (i = 0; i < corte; i++) {
 			nuevo.setProp(i, seleccionados.get(0).getProp(i));
 		}
@@ -164,7 +179,6 @@ public class PanelGrafico extends JComponent {
 		}
 		poblacion.add(nuevo);
 	}
-
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;

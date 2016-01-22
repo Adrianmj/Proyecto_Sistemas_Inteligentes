@@ -3,8 +3,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 public class MainWindow {
-	static final int WIDTH = 400;
-	static final int HEIGHT = 400;
+	static final int WIDTH = 600;
+	static final int HEIGHT = 350;
 	private Dimension size = new Dimension(WIDTH,HEIGHT);
 	protected JFrame boardFrame;
 	PanelGrafico panel;
