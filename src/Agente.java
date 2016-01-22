@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class Agente {
 	private int x, y;
 	ArrayList<Recurso> coordRecursos;
+	ArrayList<Edificio> coordEdificios;
 	private int Radius;
 	private int maxW, maxH;
 	int lastMove = -1;
@@ -15,8 +16,9 @@ public class Agente {
 
 	private int propUp, propDown, propRight, propLeft;
 	private int best = -1;
-	public Agente(int x, int y, ArrayList<Recurso> coordRecursos, int maxW, int maxH) {
+	public Agente(int x, int y, ArrayList<Recurso> coordRecursos, ArrayList<Edificio> coordEdificio, int maxW, int maxH) {
 		this.coordRecursos = coordRecursos;
+		this.coordEdificios = coordEdificio;
 		this.setX(x);
 		this.setY(y);
 		this.setRadius(25);
@@ -44,7 +46,7 @@ public class Agente {
 	public void setX(int x) {
 		this.x = x;
 	}
-	
+
 	public int getProp(int i) {
 		switch (i) {
 		case 0:
@@ -59,7 +61,7 @@ public class Agente {
 			return -1;
 		}
 	}
-	
+
 	public void setProp(int i, int valor) {
 		switch (i) {
 		case 0:
@@ -82,26 +84,26 @@ public class Agente {
 
 	public int getBest() {
 		int max = 0;
-	
-//		String mejor;
+
+		//		String mejor;
 		if (max <= this.right) {
 			max = this.right;
-//			mejor = "Derecha";
+			//			mejor = "Derecha";
 			best = 0;
 		}
 		if (max <= this.left) {
 			max = this.left;
-//			mejor = "Izquierda";
+			//			mejor = "Izquierda";
 			best = 1;
 		}
 		if (max <= this.down) {
 			max = this.down;
-//			mejor = "Abajo";
+			//			mejor = "Abajo";
 			best = 2;
 		}
 		if (max <= this.up) {
 			max = this.up;
-//			mejor = "Arriba";
+			//			mejor = "Arriba";
 			best = 3;
 		}
 
@@ -113,7 +115,7 @@ public class Agente {
 		this.propRight = this.propRight - 1;
 		this.propDown = this.propDown - 1;
 		this.propUp = this.propUp - 1;
-		
+
 		switch (mejor) {
 		case "Derecha":
 			this.propRight = this.propRight + 4;
@@ -178,6 +180,19 @@ public class Agente {
 			}
 			else {
 				this.addRecursos();
+				if (this.Int > 15 && this.numRecursos > 5) {
+					int tipo = (int) (Math.random() * 4);
+					for (int j = 0; j < coordEdificios.size(); j++) {
+						if (coordEdificios.get(j).getTipo() == tipo && numRecursos >= coordEdificios.get(j).getCalidad()*100+5) {
+							if (coordEdificios.get(j).getCalidad() == 0) {
+								coordEdificios.get(j).setPoint(this.getPunto());
+							}
+							coordEdificios.get(j).addCalidad();
+						}
+							
+					}
+
+				}
 			}
 			coordRecursos.remove(i);
 			return true;
@@ -187,7 +202,7 @@ public class Agente {
 
 	public void move() {
 		int aux = (int) (Math.random() * 4);
-		
+
 		this.lastMove = aux;
 		switch (aux) {
 		case 0:
@@ -243,11 +258,11 @@ public class Agente {
 	public int getEnergy() {
 		return Energy;
 	}
-	
+
 	public int getStrength() {
 		return Strength;
 	}
-	
+
 	public int getInt() {
 		return Int;
 	}
@@ -255,7 +270,7 @@ public class Agente {
 	public void setEnergy(int energy) {
 		this.Energy = energy;
 	}
-	
+
 	public void setStrength(int strength) {
 		this.Strength = strength;
 	}
@@ -263,7 +278,7 @@ public class Agente {
 	public void setInt(int inteligencia) {
 		this.Int = inteligencia;
 	}
-	
+
 	public int getPropUp() {
 		return propUp;
 	}
@@ -295,15 +310,15 @@ public class Agente {
 	public void setPropDown(int propDown) {
 		this.propDown = propDown;
 	}
-	
+
 	public void setRecursos(int recursos) {
 		this.numRecursos = recursos;
 	}
-	
+
 	public void addRecursos() {
 		this.numRecursos++;
 	}
-	
+
 	public int getRecursos() {
 		return this.numRecursos;
 	}

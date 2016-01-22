@@ -85,9 +85,13 @@ public class PanelGrafico extends JComponent {
 
 			x1 = (int) x2 + this.getWidth() / 2;
 			y1 = (int) y2 + this.getHeight() / 2;
-			poblacion.add(new Agente(x1, y1, coordRecursos, this.getWidth(), this.getHeight()));
+			poblacion.add(new Agente(x1, y1, coordRecursos, edificios, this.getWidth(), this.getHeight()));
 		}
 		undefined = false;
+		edificios.add(new Edificio(0, new Point(10,0)));
+		edificios.add(new Edificio(1, new Point(20,0)));
+		edificios.add(new Edificio(2, new Point(30,0)));
+
 	}
 
 	public boolean update() {
@@ -173,7 +177,7 @@ public class PanelGrafico extends JComponent {
 		y2 = Math.random() * 2 * ylim - ylim;
 		x1 = (int) x2 + this.getWidth() / 2;
 		y1 = (int) y2 + this.getHeight() / 2;
-		Agente nuevo = new Agente(x1, y1, coordRecursos, this.getWidth(), this.getHeight());
+		Agente nuevo = new Agente(x1, y1, coordRecursos, edificios, this.getWidth(), this.getHeight());
 		//el hijo heredara un 25% de los recursos de cada padre
 		int recursosP = 0;
 		int recursosM = 0;
@@ -228,6 +232,12 @@ public class PanelGrafico extends JComponent {
 			g2d.drawOval(punto.x - poblacion.get(i).getRadius(), punto.y - poblacion.get(i).getRadius(),
 					poblacion.get(i).getRadius() * 2, poblacion.get(i).getRadius() * 2);
 
+		}
+		g.setColor(Color.red);
+		for (int i = 0; i < edificios.size(); i++) {
+			Point punto = edificios.get(i).getPunto();
+			g2d.drawRect(punto.x, punto.y, 40, 70);
+			
 		}
 
 	}
