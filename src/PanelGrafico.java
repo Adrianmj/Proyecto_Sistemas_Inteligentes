@@ -13,14 +13,15 @@ public class PanelGrafico extends JComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	Random rand = new Random();
-	ArrayList<Comida> coordComidas = new ArrayList<Comida>();
+	ArrayList<Recurso> coordRecursos = new ArrayList<Recurso>();
+	ArrayList<Edificio> edificios = new ArrayList<Edificio>();
 	static ArrayList<Agente> poblacion = new ArrayList<Agente>();
 	PanelBotones panel;
 	boolean undefined = true;
 	private int ano = 0;
 
 	ArrayList<Agente> seleccionados = new ArrayList<Agente>();
-	int NUMCOMIDA = 200;
+	int NUMRecurso = 200;
 	int NUMPOB = 6;
 
 	public PanelGrafico(PanelBotones panel) {
@@ -62,7 +63,7 @@ public class PanelGrafico extends JComponent {
 	// constructor
 	public void definer() {
 		int x1, y1;
-		for (int i = 0; i < NUMCOMIDA; i++) {
+		for (int i = 0; i < NUMRecurso; i++) {
 			x1 = (int) (Math.random() * this.getWidth());
 			y1 = (int) (Math.random() * this.getHeight());
 			if (x1 > this.getWidth() - 5) {
@@ -72,7 +73,7 @@ public class PanelGrafico extends JComponent {
 				y1 = y1 + y1 - this.getHeight() - 5;
 			}
 
-			coordComidas.add(new Comida(x1, y1));
+			coordRecursos.add(new Recurso(x1, y1));
 		}
 		double x2, y2;
 		int radius = 15;
@@ -84,7 +85,7 @@ public class PanelGrafico extends JComponent {
 
 			x1 = (int) x2 + this.getWidth() / 2;
 			y1 = (int) y2 + this.getHeight() / 2;
-			poblacion.add(new Agente(x1, y1, coordComidas, this.getWidth(), this.getHeight()));
+			poblacion.add(new Agente(x1, y1, coordRecursos, this.getWidth(), this.getHeight()));
 		}
 		undefined = false;
 	}
@@ -135,7 +136,7 @@ public class PanelGrafico extends JComponent {
 				seleccionado = poblacion.get(1);
 				seleccionados.add(seleccionado);
 			} else {
-			while (seleccionados.size() < 2) {
+			while (seleccionados.size() < 2 && mejores > 1) {
 				System.out.println("TAMAÑO DE LOS SLEKSIONADOS " + seleccionados.size());
 				System.out.println("TAMAÑO DE LA POBLASION " + poblacion.size());
 				System.out.println(mejores);
@@ -147,9 +148,14 @@ public class PanelGrafico extends JComponent {
 
 				}
 			}
-			System.out.println(seleccionados.get(0));
-			System.out.println(seleccionados.get(1));
-			mutacion();
+			if (mejores > 1) {
+				System.out.println(seleccionados.get(0));
+				System.out.println(seleccionados.get(1));
+				mutacion();
+			}
+			else {
+				System.out.println("No se ha podido emparejar");
+			}
 		}
 
 	}
@@ -167,7 +173,17 @@ public class PanelGrafico extends JComponent {
 		y2 = Math.random() * 2 * ylim - ylim;
 		x1 = (int) x2 + this.getWidth() / 2;
 		y1 = (int) y2 + this.getHeight() / 2;
-		Agente nuevo = new Agente(x1, y1, coordComidas, this.getWidth(), this.getHeight());
+		Agente nuevo = new Agente(x1, y1, coordRecursos, this.getWidth(), this.getHeight());
+		//el hijo heredara un 25% de los recursos de cada padre
+		int recursosP = 0;
+		int recursosM = 0;
+		recursosP = seleccionados.get(0).getRecursos()/4;
+		recursosM = seleccionados.get(1).getRecursos()/4;
+		
+		seleccionados.get(0).setRecursos(seleccionados.get(0).getRecursos() - recursosP);
+		seleccionados.get(1).setRecursos(seleccionados.get(1).getRecursos() - recursosM);
+		
+		nuevo.setRecursos(recursosP + recursosM);
 
 		// Le pasamos las propiedades
 		for (i = 0; i < corte; i++) {
@@ -175,6 +191,13 @@ public class PanelGrafico extends JComponent {
 		}
 		for (i = corte; i < 3; i++) {
 			nuevo.setProp(i, seleccionados.get(1).getProp(i));
+		}
+		if (edificios.size() > 0) {
+			for (i = 0; i < edificios.size(); i++) {
+				nuevo.setEnergy(edificios.get(i).efectoMutacion(1, nuevo.getEnergy()));
+				nuevo.setStrength(edificios.get(i).efectoMutacion(2, nuevo.getStrength()));
+				nuevo.setInt(edificios.get(i).efectoMutacion(3, nuevo.getInt()));
+			}
 		}
 		poblacion.add(nuevo);
 	}
@@ -186,9 +209,14 @@ public class PanelGrafico extends JComponent {
 		if (undefined) {
 			this.definer();
 		}
-		g2d.setColor(Color.orange);
-		for (int i = 0; i < coordComidas.size(); i++) {
-			Point punto = coordComidas.get(i).getPunto();
+		for (int i = 0; i < coordRecursos.size(); i++) {
+			if (coordRecursos.get(i).getTipo() == 0) {
+				g2d.setColor(Color.blue);
+			}
+			else {
+				g2d.setColor(Color.orange);
+			}
+			Point punto = coordRecursos.get(i).getPunto();
 			g2d.fillRect(punto.x, punto.y, 5, 5);
 
 		}

@@ -3,16 +3,20 @@ import java.util.ArrayList;
 
 public class Agente {
 	private int x, y;
-	ArrayList<Comida> coordComidas;
+	ArrayList<Recurso> coordRecursos;
 	private int Radius;
 	private int maxW, maxH;
 	int lastMove = -1;
 	int up, down, left, right;
 	private int Energy = 20;
+	private int Strength = 20;
+	private int Int = 20;
+	private int numRecursos = 0;
+
 	private int propUp, propDown, propRight, propLeft;
 	private int best = -1;
-	public Agente(int x, int y, ArrayList<Comida> coordComidas, int maxW, int maxH) {
-		this.coordComidas = coordComidas;
+	public Agente(int x, int y, ArrayList<Recurso> coordRecursos, int maxW, int maxH) {
+		this.coordRecursos = coordRecursos;
 		this.setX(x);
 		this.setY(y);
 		this.setRadius(25);
@@ -159,18 +163,23 @@ public class Agente {
 		}
 	}
 
-	public boolean eat(int i) {
+	public boolean recolectar(int i) {
 		double dx, dy;
-		dx = Math.abs(coordComidas.get(i).getX() - this.getX());
-		dy = Math.abs(coordComidas.get(i).getY() - this.getY());
+		dx = Math.abs(coordRecursos.get(i).getX() - this.getX());
+		dy = Math.abs(coordRecursos.get(i).getY() - this.getY());
 		double aux = Math.sqrt(dx * dx + dy * dy);
 		if (aux < Radius) {
 
-			this.setX(coordComidas.get(i).getX());
-			this.setY(coordComidas.get(i).getY());
+			this.setX(coordRecursos.get(i).getX());
+			this.setY(coordRecursos.get(i).getY());
 			this.opcCounter();
-			this.setEnergy(this.getEnergy() + 1);
-			coordComidas.remove(i);
+			if (coordRecursos.get(i).getTipo() == 0) {
+				this.setEnergy(this.getEnergy() + 1);
+			}
+			else {
+				this.addRecursos();
+			}
+			coordRecursos.remove(i);
 			return true;
 		}
 		return false;
@@ -215,8 +224,8 @@ public class Agente {
 
 	public boolean accion() {
 
-		for (int i = 0; i < coordComidas.size(); i++) {
-			if (eat(i)) {
+		for (int i = 0; i < coordRecursos.size(); i++) {
+			if (recolectar(i)) {
 				return true;
 			}
 		}
@@ -234,11 +243,27 @@ public class Agente {
 	public int getEnergy() {
 		return Energy;
 	}
+	
+	public int getStrength() {
+		return Strength;
+	}
+	
+	public int getInt() {
+		return Int;
+	}
 
 	public void setEnergy(int energy) {
 		this.Energy = energy;
 	}
+	
+	public void setStrength(int strength) {
+		this.Strength = strength;
+	}
 
+	public void setInt(int inteligencia) {
+		this.Int = inteligencia;
+	}
+	
 	public int getPropUp() {
 		return propUp;
 	}
@@ -269,5 +294,17 @@ public class Agente {
 
 	public void setPropDown(int propDown) {
 		this.propDown = propDown;
+	}
+	
+	public void setRecursos(int recursos) {
+		this.numRecursos = recursos;
+	}
+	
+	public void addRecursos() {
+		this.numRecursos++;
+	}
+	
+	public int getRecursos() {
+		return this.numRecursos;
 	}
 }

@@ -1,14 +1,16 @@
 
 import java.awt.Point;
 
-public class Comida {
+public class Recurso {
 	private int x;
 	private int y;
+	private int tipo; //tipo 0 = comida 1 = recurso (material edificio)
 	private static final int SIZE = 5;
 
-	public Comida(int x, int y) {
+	public Recurso(int x, int y) {
 		this.setX(x);
 		this.setY(y);
+		this.tipo =(int) (Math.random() * 2);
 	}
 
 	public int getX() {
@@ -32,6 +34,10 @@ public class Comida {
 		return punto;
 	}
 
+	public int getTipo() {
+		return this.tipo;
+	}
+	
 	public static int getSize() {
 		return SIZE;
 	}
