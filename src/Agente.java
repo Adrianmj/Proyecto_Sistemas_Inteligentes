@@ -79,25 +79,25 @@ public class Agente {
 	public int getBest() {
 		int max = 0;
 	
-		String mejor = "Nadie";
+//		String mejor;
 		if (max <= this.right) {
 			max = this.right;
-			mejor = "Derecha";
+//			mejor = "Derecha";
 			best = 0;
 		}
 		if (max <= this.left) {
 			max = this.left;
-			mejor = "Izquierda";
+//			mejor = "Izquierda";
 			best = 1;
 		}
 		if (max <= this.down) {
 			max = this.down;
-			mejor = "Abajo";
+//			mejor = "Abajo";
 			best = 2;
 		}
 		if (max <= this.up) {
 			max = this.up;
-			mejor = "Arriba";
+//			mejor = "Arriba";
 			best = 3;
 		}
 
