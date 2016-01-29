@@ -4,7 +4,11 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 public class MainWindow {
 	static final int WIDTH = 600;
-	static final int HEIGHT = 350;
+	static final int HEIGHT = 600;
+	static final int INIT_EN = 15;
+	static final int INIT_STR = 15;
+	static final int INIT_INT = 10;
+
 	private Dimension size = new Dimension(WIDTH,HEIGHT);
 	protected JFrame boardFrame;
 	PanelGrafico panel;

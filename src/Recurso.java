@@ -10,7 +10,11 @@ public class Recurso {
 	public Recurso(int x, int y) {
 		this.setX(x);
 		this.setY(y);
-		this.tipo =(int) (Math.random() * 2);
+		int random = (int) (Math.random() * 10);
+		if (random < 7)
+			this.tipo = 0;
+		else 
+			this.tipo = 1;
 	}
 
 	public int getX() {

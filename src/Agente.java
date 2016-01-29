@@ -9,9 +9,10 @@ public class Agente {
 	private int maxW, maxH;
 	int lastMove = -1;
 	int up, down, left, right;
-	private int Energy = 20;
-	private int Strength = 20;
-	private int Int = 20;
+	private int Energy;
+	private int Strength;
+	private int Int;
+	private int Edad;
 	private int numRecursos = 0;
 
 	private int propUp, propDown, propRight, propLeft;
@@ -21,14 +22,17 @@ public class Agente {
 		this.coordEdificios = coordEdificio;
 		this.setX(x);
 		this.setY(y);
-		this.setRadius(25);
 		this.maxH = maxH;
 		this.maxW = maxW;
 		this.setPropRight(25);
 		this.setPropLeft(25);
 		this.setPropUp(25);
 		this.setPropDown(25);
-
+		this.Energy = MainWindow.INIT_EN;
+		this.Strength = MainWindow.INIT_STR;
+		this.Int = MainWindow.INIT_INT;
+		this.setRadius(15 + this.Strength);
+		this.Edad = 0;
 	}
 
 	public int getY() {
@@ -180,12 +184,12 @@ public class Agente {
 			}
 			else {
 				this.addRecursos();
-				if (this.Int > 15 && this.numRecursos > 5) {
+				if (this.Int >= 15) {
 					int tipo = (int) (Math.random() * 4);
 					for (int j = 0; j < coordEdificios.size(); j++) {
-						if (coordEdificios.get(j).getTipo() == tipo && numRecursos >= coordEdificios.get(j).getCalidad()*100+5) {
+						if (coordEdificios.get(j).getTipo() == tipo && numRecursos >= coordEdificios.get(j).getCalidad() * 3) {
 							if (coordEdificios.get(j).getCalidad() == 0) {
-								coordEdificios.get(j).setPoint(this.getPunto());
+								coordEdificios.get(j).setPoint(new Point(coordEdificios.get(j).getTipo() * 50, 0));
 							}
 							coordEdificios.get(j).addCalidad();
 						}
@@ -273,6 +277,7 @@ public class Agente {
 
 	public void setStrength(int strength) {
 		this.Strength = strength;
+		this.setRadius(15 + this.Strength);
 	}
 
 	public void setInt(int inteligencia) {
@@ -321,5 +326,13 @@ public class Agente {
 
 	public int getRecursos() {
 		return this.numRecursos;
+	}
+	
+	public int getEdad() {
+		return this.Edad;
+	}
+	
+	public void addEdad() {
+		this.Edad++;
 	}
 }

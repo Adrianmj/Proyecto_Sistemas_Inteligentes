@@ -39,14 +39,13 @@ public class PanelBotones extends Container {
 		this.add(pause);
 	}
 
-
 	public void finalizer(){
 		this.timer.stop();
 		JFrame end = new JFrame();
 		end.setTitle("Finalizar");
-		end.setSize(230, 100);
+		end.setSize(300, 100);
 		end.setLocationRelativeTo(null);
-		JLabel fin = new JLabel("Poblacion Muerta",SwingConstants.CENTER);
+		JLabel fin = new JLabel("Poblacion Muerta, generación número: " + Panel.getGen(),SwingConstants.CENTER);
 		end.add(fin);
 		end.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		end.setVisible(true);

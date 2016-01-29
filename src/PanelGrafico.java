@@ -12,6 +12,7 @@ public class PanelGrafico extends JComponent {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public int GENERACION = 0;
 	Random rand = new Random();
 	ArrayList<Recurso> coordRecursos = new ArrayList<Recurso>();
 	ArrayList<Edificio> edificios = new ArrayList<Edificio>();
@@ -28,6 +29,9 @@ public class PanelGrafico extends JComponent {
 		this.panel = panel;
 	}
 
+	public int getGen() {
+		return this.GENERACION;
+	}
 	public static void quicksort(int izq, int der) {
 		Agente pivote = poblacion.get(izq); // tomamos primer elemento como
 		// pivote
@@ -63,18 +67,7 @@ public class PanelGrafico extends JComponent {
 	// constructor
 	public void definer() {
 		int x1, y1;
-		for (int i = 0; i < NUMRecurso; i++) {
-			x1 = (int) (Math.random() * this.getWidth());
-			y1 = (int) (Math.random() * this.getHeight());
-			if (x1 > this.getWidth() - 5) {
-				x1 = x1 + x1 - this.getWidth() - 5;
-			}
-			if (y1 > this.getWidth() - 5) {
-				y1 = y1 + y1 - this.getHeight() - 5;
-			}
-
-			coordRecursos.add(new Recurso(x1, y1));
-		}
+		this.crearRecursos();
 		double x2, y2;
 		int radius = 15;
 		double ylim;
@@ -94,6 +87,23 @@ public class PanelGrafico extends JComponent {
 
 	}
 
+	public void crearRecursos() {
+		int x1, y1;
+		//primero eliminamos los recursos viejos
+		coordRecursos.clear();
+		for (int i = 0; i < NUMRecurso; i++) {
+			x1 = (int) (Math.random() * this.getWidth());
+			y1 = (int) (Math.random() * this.getHeight());
+			if (x1 > this.getWidth() - 5) {
+				x1 = x1 + x1 - this.getWidth() - 5;
+			}
+			if (y1 > this.getWidth() - 5) {
+				y1 = y1 + y1 - this.getHeight() - 5;
+			}
+
+			coordRecursos.add(new Recurso(x1, y1));
+		}
+	}
 	public boolean update() {
 		ano++;
 		if (0 == ano % 10) {
@@ -102,8 +112,13 @@ public class PanelGrafico extends JComponent {
 			System.out.print("[");
 			for (int j = 0; j < poblacion.size(); j++) {
 				System.out.print(poblacion.get(j).getBest() + ",");
+				poblacion.get(j).addEdad();
+				if (poblacion.get(j).getEdad() > 5)
+					poblacion.remove(j);
 			}
 			System.out.println("]");
+			this.GENERACION++;
+			this.crearRecursos();
 			seleccion();
 		}
 		for (int i = 0; i < poblacion.size(); i++) {
@@ -126,7 +141,7 @@ public class PanelGrafico extends JComponent {
 	}
 
 	public void seleccion() {
-		int mejores = poblacion.size() * 20 / 100 + 1;
+		int mejores = poblacion.size() * 40 / 100 + 1;
 		System.out.println(mejores);
 		Agente seleccionado;
 
@@ -140,11 +155,11 @@ public class PanelGrafico extends JComponent {
 				seleccionado = poblacion.get(1);
 				seleccionados.add(seleccionado);
 			} else {
-			while (seleccionados.size() < 2 && mejores > 1) {
-				System.out.println("TAMAÑO DE LOS SLEKSIONADOS " + seleccionados.size());
-				System.out.println("TAMAÑO DE LA POBLASION " + poblacion.size());
-				System.out.println(mejores);
-	
+				while (seleccionados.size() < mejores) {
+					System.out.println("TAMAÑO DE LOS SLEKSIONADOS " + seleccionados.size());
+					System.out.println("TAMAÑO DE LA POBLASION " + poblacion.size());
+					System.out.println(mejores);
+
 					seleccionado = poblacion.get((int) (poblacion.size() - Math.random() * mejores));
 
 					if (seleccionados.contains(seleccionado) == false)
@@ -152,14 +167,8 @@ public class PanelGrafico extends JComponent {
 
 				}
 			}
-			if (mejores > 1) {
-				System.out.println(seleccionados.get(0));
-				System.out.println(seleccionados.get(1));
+			while (seleccionados.size() > 2)
 				mutacion();
-			}
-			else {
-				System.out.println("No se ha podido emparejar");
-			}
 		}
 
 	}
@@ -172,6 +181,7 @@ public class PanelGrafico extends JComponent {
 		double x2, y2;
 		int radius = 15;
 		double ylim;
+		int mutado = 0;
 		x2 = (Math.random() * 2 * radius) - radius;
 		ylim = Math.sqrt(radius * radius - x2 * x2);
 		y2 = Math.random() * 2 * ylim - ylim;
@@ -183,10 +193,10 @@ public class PanelGrafico extends JComponent {
 		int recursosM = 0;
 		recursosP = seleccionados.get(0).getRecursos()/4;
 		recursosM = seleccionados.get(1).getRecursos()/4;
-		
+
 		seleccionados.get(0).setRecursos(seleccionados.get(0).getRecursos() - recursosP);
 		seleccionados.get(1).setRecursos(seleccionados.get(1).getRecursos() - recursosM);
-		
+
 		nuevo.setRecursos(recursosP + recursosM);
 
 		// Le pasamos las propiedades
@@ -196,13 +206,22 @@ public class PanelGrafico extends JComponent {
 		for (i = corte; i < 3; i++) {
 			nuevo.setProp(i, seleccionados.get(1).getProp(i));
 		}
-		if (edificios.size() > 0) {
-			for (i = 0; i < edificios.size(); i++) {
-				nuevo.setEnergy(edificios.get(i).efectoMutacion(1, nuevo.getEnergy()));
-				nuevo.setStrength(edificios.get(i).efectoMutacion(2, nuevo.getStrength()));
-				nuevo.setInt(edificios.get(i).efectoMutacion(3, nuevo.getInt()));
-			}
-		}
+		
+		mutado = (int) (Math.random() * 10);
+		if (mutado > 5)
+			nuevo.setEnergy(nuevo.getEnergy() + 2);
+		mutado = (int) (Math.random() * 10);
+		if (mutado > 5)
+			nuevo.setStrength(nuevo.getStrength() + 2);
+		mutado = (int) (Math.random() * 10);
+		if (mutado > 5)
+			nuevo.setInt(nuevo.getInt() + 1);
+		
+		nuevo.setEnergy(edificios.get(0).efectoMutacion(nuevo.getEnergy()));
+		nuevo.setStrength(edificios.get(1).efectoMutacion(nuevo.getStrength()));
+		nuevo.setInt(edificios.get(2).efectoMutacion(nuevo.getInt()));
+		seleccionados.remove(0);
+		seleccionados.remove(1);
 		poblacion.add(nuevo);
 	}
 
@@ -215,10 +234,10 @@ public class PanelGrafico extends JComponent {
 		}
 		for (int i = 0; i < coordRecursos.size(); i++) {
 			if (coordRecursos.get(i).getTipo() == 0) {
-				g2d.setColor(Color.blue);
+				g2d.setColor(Color.orange);
 			}
 			else {
-				g2d.setColor(Color.orange);
+				g2d.setColor(Color.blue);
 			}
 			Point punto = coordRecursos.get(i).getPunto();
 			g2d.fillRect(punto.x, punto.y, 5, 5);
@@ -233,11 +252,28 @@ public class PanelGrafico extends JComponent {
 					poblacion.get(i).getRadius() * 2, poblacion.get(i).getRadius() * 2);
 
 		}
-		g.setColor(Color.red);
 		for (int i = 0; i < edificios.size(); i++) {
 			Point punto = edificios.get(i).getPunto();
-			g2d.drawRect(punto.x, punto.y, 40, 70);
-			
+
+			switch (i) {
+			case 1:
+				g.setColor(Color.red);
+				break;
+			case 2:
+				g.setColor(Color.CYAN);
+				break;
+			case 3:
+				g.setColor(Color.WHITE);
+				break;
+
+			default:
+				break;
+			}
+			if (edificios.get(i).getCalidad() != 0) {
+				g2d.fillRect(punto.x, punto.y, 40, 70);
+				g.setColor(Color.BLACK);
+				g2d.drawString(String.valueOf(edificios.get(i).getCalidad()), punto.x + 15, punto.y + 40);
+			}
 		}
 
 	}

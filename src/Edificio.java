@@ -18,10 +18,8 @@ public class Edificio {
 	public void setPoint( Point pepe) {
 		this.punto = pepe;
 	}
-	public int efectoMutacion(int tipo, int caracteristica) {
-		if (tipo == this.TipoMejora)
+	public int efectoMutacion(int caracteristica) {
 			return caracteristica + calidad;
-		return caracteristica;
 	}
 	
 	public int getTipo() {
@@ -33,6 +31,6 @@ public class Edificio {
 	}
 	
 	public void addCalidad() {
-		this.calidad++;
+		this.calidad += 1;
 	}
 }
